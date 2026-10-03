@@ -1,0 +1,199 @@
+---
+import Terminal from '../layouts/Terminal.astro';
+
+interface Tool {
+	name: string;
+	url: string;
+}
+
+interface Shop {
+	name: string;
+	url: string;
+	tools: Tool[];
+}
+
+const shops: Shop[] = [
+	{
+		name: 'Ghostty',
+		url: 'https://ghostty.org',
+		tools: [{ name: 'Ghostty', url: 'https://ghostty.org' }],
+	},
+	{
+		name: 'Charm',
+		url: 'https://charm.sh',
+		tools: [
+			{ name: 'Bubble Tea', url: 'https://github.com/charmbracelet/bubbletea' },
+			{ name: 'Bubbles', url: 'https://github.com/charmbracelet/bubbles' },
+			{ name: 'Lip Gloss', url: 'https://github.com/charmbracelet/lipgloss' },
+			{ name: 'Wish', url: 'https://github.com/charmbracelet/wish' },
+		],
+	},
+	{
+		name: 'CNCF',
+		url: 'https://www.cncf.io',
+		tools: [
+			{ name: 'Dapr', url: 'https://dapr.io' },
+			{ name: 'CloudEvents', url: 'https://cloudevents.io' },
+		],
+	},
+	{
+		name: 'NATS',
+		url: 'https://nats.io',
+		tools: [
+			{ name: 'NATS', url: 'https://nats.io' },
+			{ name: 'JetStream', url: 'https://docs.nats.io/nats-concepts/jetstream' },
+		],
+	},
+	{
+		name: 'IBM',
+		url: 'https://www.ibm.com',
+		tools: [
+			{ name: 'Ansible', url: 'https://www.ansible.com' },
+			{ name: 'Podman', url: 'https://podman.io' },
+		],
+	},
+	{
+		name: 'IBM HashiCorp',
+		url: 'https://www.hashicorp.com',
+		tools: [
+			{ name: 'Vault', url: 'https://developer.hashicorp.com/vault' },
+			{ name: 'Consul', url: 'https://developer.hashicorp.com/consul' },
+			{ name: 'Nomad', url: 'https://developer.hashicorp.com/nomad' },
+			{ name: 'Terraform', url: 'https://developer.hashicorp.com/terraform' },
+		],
+	},
+	{
+		name: 'GNU',
+		url: 'https://www.gnu.org',
+		tools: [
+			{ name: 'Guix', url: 'https://guix.gnu.org' },
+			{ name: 'Make', url: 'https://www.gnu.org/software/make/' },
+		],
+	},
+	{
+		name: 'Fedora',
+		url: 'https://fedoraproject.org',
+		tools: [{ name: 'Fedora', url: 'https://fedoraproject.org' }],
+	},
+	{
+		name: 'containers.dev',
+		url: 'https://containers.dev',
+		tools: [
+			{ name: 'Dev Container Specification', url: 'https://containers.dev/implementors/spec/' },
+		],
+	},
+	{
+		name: 'slsa.dev',
+		url: 'https://slsa.dev',
+		tools: [{ name: 'SLSA Specification', url: 'https://slsa.dev/spec/' }],
+	},
+	{
+		name: 'Linux Foundation',
+		url: 'https://www.linuxfoundation.org',
+		tools: [{ name: 'Linux kernel', url: 'https://www.kernel.org' }],
+	},
+	{
+		name: 'Neovim',
+		url: 'https://neovim.io',
+		tools: [
+			{ name: 'Neovim', url: 'https://neovim.io' },
+			{ name: 'LazyVim', url: 'https://www.lazyvim.org' },
+		],
+	},
+	{
+		name: 'Google',
+		url: 'https://opensource.google',
+		tools: [{ name: 'Go', url: 'https://go.dev' }],
+	},
+	{
+		name: 'CUE',
+		url: 'https://cuelang.org',
+		tools: [{ name: 'CUE', url: 'https://cuelang.org' }],
+	},
+	{
+		name: 'Zig Software Foundation',
+		url: 'https://ziglang.org/zsf/',
+		tools: [{ name: 'Zig', url: 'https://ziglang.org' }],
+	},
+];
+
+const toolCount = shops.reduce((n, shop) => n + shop.tools.length, 0);
+
+// tree(1) branch glyphs
+const branch = (last: boolean) => (last ? '└── ' : '├── ');
+const indent = (last: boolean) => (last ? '    ' : '│   ');
+---
+
+<Terminal title="thanks">
+	<p class="cmd">cat ~/thanks/README</p>
+	<p class="out">
+		We build on the shoulders of these dev shops. Thank you for the tools we use every day.
+	</p>
+
+	<p class="cmd">tree ~/thanks</p>
+	<div class="out tree">
+		<p class="root">thanks</p>
+		<ul>
+			{
+				shops.map((shop, i) => {
+					const lastShop = i === shops.length - 1;
+					return (
+						<li>
+							<span class="glyph" aria-hidden="true">{branch(lastShop)}</span>
+							<a class="shop" href={shop.url}>{shop.name}/</a>
+							<ul>
+								{shop.tools.map((tool, j) => (
+									<li>
+										<span class="glyph" aria-hidden="true">{indent(lastShop) + branch(j === shop.tools.length - 1)}</span>
+										<a class="tool" href={tool.url}>{tool.name}</a>
+									</li>
+								))}
+							</ul>
+						</li>
+					);
+				})
+			}
+		</ul>
+		<p class="summary dim">{shops.length} directories, {toolCount} files</p>
+	</div>
+</Terminal>
+
+<style>
+	/* tight enough for the box-drawing glyphs to join up */
+	.tree {
+		line-height: 1.35;
+	}
+
+	.tree p {
+		margin: 0;
+	}
+
+	.root {
+		color: var(--blue);
+		font-weight: 700;
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.glyph {
+		color: var(--comment);
+		white-space: pre;
+	}
+
+	.shop {
+		color: var(--blue);
+		font-weight: 700;
+	}
+
+	.tool {
+		color: var(--cyan);
+	}
+
+	.tree .summary {
+		margin-top: 1rem;
+	}
+</style>

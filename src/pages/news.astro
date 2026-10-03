@@ -1,0 +1,112 @@
+---
+import { getCollection, render } from 'astro:content';
+import Terminal from '../layouts/Terminal.astro';
+
+const entries = (await getCollection('news')).sort(
+	(a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+// git log style: newest first, short hash of the post body
+const shortHash = async (text: string) => {
+	const digest = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(text));
+	return [...new Uint8Array(digest)]
+		.map((b) => b.toString(16).padStart(2, '0'))
+		.join('')
+		.slice(0, 7);
+};
+
+const posts = await Promise.all(
+	entries.map(async (entry) => ({
+		hash: await shortHash(entry.body ?? ''),
+		date: entry.data.date.toISOString().slice(0, 10),
+		title: entry.data.title,
+		Content: (await render(entry)).Content,
+	})),
+);
+---
+
+<Terminal title="news">
+	<p class="cmd">git log --date=short</p>
+	{
+		posts.map(({ hash, date, title, Content }, i) => (
+			<article class="commit">
+				<p class="meta">
+					<span class="hash">commit {hash}</span>
+					{i === 0 && (
+						<span class="ref">
+							(<span class="head">HEAD</span> -&gt; <span class="branch">develop</span>)
+						</span>
+					)}
+				</p>
+				<p class="meta">
+					<span class="dim">Date:</span>
+					<time datetime={date}>{date}</time>
+				</p>
+				<h2>{title}</h2>
+				<div class="body">
+					<Content />
+				</div>
+			</article>
+		))
+	}
+</Terminal>
+
+<style>
+	.commit {
+		margin-bottom: 2rem;
+	}
+
+	.meta {
+		margin: 0;
+		color: var(--fg-dim);
+	}
+
+	.hash {
+		color: var(--yellow);
+	}
+
+	.ref {
+		margin-left: 1ch;
+		color: var(--yellow);
+	}
+
+	.head {
+		color: var(--cyan);
+		font-weight: 700;
+	}
+
+	.branch {
+		color: var(--green);
+		font-weight: 700;
+	}
+
+	time {
+		margin-left: 2ch;
+	}
+
+	h2 {
+		margin: 1rem 0 0.75rem 4ch;
+		font-size: 1rem;
+		color: var(--fg);
+	}
+
+	.body {
+		margin-left: 4ch;
+		color: var(--fg-dim);
+	}
+
+	.body :global(p) {
+		margin: 0 0 0.75rem;
+	}
+
+	.body :global(strong) {
+		color: var(--magenta);
+	}
+
+	@media (max-width: 640px) {
+		h2,
+		.body {
+			margin-left: 2ch;
+		}
+	}
+</style>

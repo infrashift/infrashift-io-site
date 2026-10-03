@@ -3,7 +3,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import '../styles/global.css';
 import Prompt from '../components/Prompt.astro';
-import TabBar from '../components/TabBar.astro';
+import StatusBar from '../components/StatusBar.astro';
 
 interface Props {
 	title?: string;
@@ -13,7 +13,7 @@ interface Props {
 
 const {
 	title,
-	description = 'infrashift: infrastructure, shifted left.',
+	description = 'infrashift builds software supply chain security tooling and fast, keyboard-driven TUIs.',
 	cwd = '~' + Astro.url.pathname.replace(/\/+$/, ''),
 } = Astro.props;
 
@@ -26,7 +26,7 @@ const pageTitle = title ? `${title} · infrashift` : 'infrashift';
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
-		<meta name="theme-color" content="#1a1b26" />
+		<meta name="theme-color" content="#e0af68" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
@@ -34,18 +34,33 @@ const pageTitle = title ? `${title} · infrashift` : 'infrashift';
 	<body>
 		<div class="window">
 			<header class="titlebar">
-				<Prompt href="/" />
+				<span class="title">tmux a -t infrashift</span>
 				<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
 			</header>
-			<TabBar />
-			<main class="content">
-				<slot />
-			</main>
-			<footer class="status">
-				<span class="mode">NORMAL</span>
-				<span class="cwd">{cwd}</span>
-				<span class="hints"><span class="dim">1-4</span> switch tab</span>
-			</footer>
+			<div class="tmux">
+				<div class="pane pane-prompt">
+					<Prompt href="/" />
+				</div>
+				<aside class="pane pane-info" aria-label="Summary">
+					<p class="whoami">
+						<span class="user">dev</span><span class="dim">@</span><span class="host"
+							>infrashift.io</span
+						>
+					</p>
+					<p class="rule dim" aria-hidden="true">─────────────────</p>
+					<dl>
+						<div><dt>focus</dt><dd>software supply chain security</dd></div>
+						<div><dt>builds</dt><dd>signed · attested · reproducible</dd></div>
+						<div><dt>ui</dt><dd>cli + tui &gt; slow web ui</dd></div>
+					</dl>
+				</aside>
+				<main class="pane pane-main">
+					<div class="content">
+						<slot />
+					</div>
+				</main>
+			</div>
+			<StatusBar cwd={cwd} />
 		</div>
 	</body>
 </html>
@@ -62,15 +77,16 @@ const pageTitle = title ? `${title} · infrashift` : 'infrashift';
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		max-width: 960px;
-		min-height: min(640px, calc(100dvh - 4rem));
+		max-width: 1040px;
+		height: min(calc(100dvh - 4rem), 860px);
 		background: var(--bg-alpha);
-		-webkit-backdrop-filter: blur(14px) saturate(140%);
-		backdrop-filter: blur(14px) saturate(140%);
+		-webkit-backdrop-filter: blur(14px);
+		backdrop-filter: blur(14px);
 		border: 1px solid var(--border);
 		border-radius: 10px;
 		box-shadow:
-			0 24px 60px rgba(0, 0, 0, 0.55),
+			0 30px 70px rgba(26, 27, 38, 0.45),
+			0 8px 20px rgba(26, 27, 38, 0.25),
 			inset 0 1px 0 rgba(192, 202, 245, 0.06);
 		overflow: hidden;
 	}
@@ -79,8 +95,10 @@ const pageTitle = title ? `${title} · infrashift` : 'infrashift';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0.75rem 1.25rem;
-		font-size: 1.25rem;
+		padding: 0.35rem 0.9rem;
+		border-bottom: 1px solid var(--border);
+		font-size: 0.8rem;
+		color: var(--comment);
 	}
 
 	.dots {
@@ -96,40 +114,79 @@ const pageTitle = title ? `${title} · infrashift` : 'infrashift';
 		border: 1px solid var(--border);
 	}
 
-	.content {
+	/* tmux layout: two panes on top, the active main pane below */
+	.tmux {
 		flex: 1;
-		width: 100%;
-		max-width: 82ch;
-		padding: 1.75rem 1.5rem 2rem;
+		min-height: 0;
+		display: grid;
+		grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+		grid-template-rows: auto minmax(0, 1fr);
 	}
 
-	.status {
-		display: flex;
-		align-items: center;
-		gap: 1ch;
-		border-top: 1px solid var(--border);
-		background: rgba(22, 22, 30, 0.7);
+	.pane {
+		min-width: 0;
+		padding: 0.75rem 1.25rem;
+	}
+
+	/* tmux highlights the border shared with the active pane */
+	.pane-prompt {
+		border-right: 1px solid var(--border);
+		border-bottom: 1px solid var(--blue);
+		font-size: 1.35rem;
+	}
+
+	.pane-info {
+		border-bottom: 1px solid var(--blue);
 		font-size: 0.85rem;
-		white-space: nowrap;
+		line-height: 1.5;
 	}
 
-	.mode {
-		padding: 0.2rem 1ch;
-		background: var(--blue);
-		color: var(--bg-dark);
+	.pane-info p {
+		margin: 0;
+	}
+
+	.user {
+		color: var(--blue);
 		font-weight: 700;
 	}
 
-	.cwd {
+	.host {
+		color: var(--magenta);
+		font-weight: 700;
+	}
+
+	.pane-info dl {
+		margin: 0;
+	}
+
+	.pane-info dl div {
+		display: flex;
+		gap: 1ch;
+	}
+
+	.pane-info dt {
+		min-width: 7ch;
+		color: var(--yellow);
+	}
+
+	.pane-info dd {
+		margin: 0;
 		color: var(--fg-dim);
 		overflow: hidden;
 		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
-	.hints {
-		margin-left: auto;
-		padding-right: 1ch;
-		color: var(--fg-dim);
+	.pane-main {
+		grid-column: 1 / -1;
+		overflow-y: auto;
+		padding: 1.5rem 1.5rem 2rem;
+		scrollbar-width: thin;
+		scrollbar-color: var(--border) transparent;
+	}
+
+	.content {
+		max-width: 82ch;
 	}
 
 	@media (max-width: 640px) {
@@ -139,15 +196,24 @@ const pageTitle = title ? `${title} · infrashift` : 'infrashift';
 		}
 
 		.window {
-			min-height: calc(100dvh - 32px);
+			height: calc(100dvh - 32px);
 		}
 
-		.content {
-			padding: 1.25rem 1rem 1.5rem;
+		.tmux {
+			grid-template-columns: minmax(0, 1fr);
 		}
 
-		.hints {
+		.pane-prompt {
+			border-right: none;
+			font-size: 1.2rem;
+		}
+
+		.pane-info {
 			display: none;
+		}
+
+		.pane-main {
+			padding: 1.25rem 1rem 1.5rem;
 		}
 	}
 </style>

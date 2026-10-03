@@ -1,0 +1,153 @@
+---
+import { tabs, isActive } from '../nav';
+
+interface Props {
+	cwd: string;
+}
+
+const { cwd } = Astro.props;
+const { pathname } = Astro.url;
+---
+
+<footer class="status">
+	<span class="session">[infrashift]</span>
+	<nav class="windows" aria-label="Main">
+		<ul>
+			{
+				tabs.map((tab) => {
+					const active = isActive(tab, pathname);
+					return (
+						<li>
+							<a
+								href={tab.href}
+								class:list={['win', { active }]}
+								aria-current={active ? 'page' : undefined}
+								aria-keyshortcuts={tab.key}
+								data-key={tab.key}
+							>
+								<span class="index">{tab.key}:</span>
+								<span class="label">{tab.label}</span>
+								<span class="flag" aria-hidden="true">{active ? '*' : ' '}</span>
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
+	</nav>
+	<span class="right">
+		<span class="cwd">{cwd}</span>
+		<span class="host">infrashift.io</span>
+	</span>
+</footer>
+
+<script>
+	// number keys select a tmux window, like prefix + 1..4
+	document.addEventListener('keydown', (event) => {
+		if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+		const target = event.target as HTMLElement | null;
+		if (target?.closest('input, textarea, select, [contenteditable]')) return;
+
+		const win = document.querySelector<HTMLAnchorElement>(`.windows a[data-key="${event.key}"]`);
+		if (win && !win.classList.contains('active')) {
+			event.preventDefault();
+			window.location.href = win.href;
+		}
+	});
+</script>
+
+<style>
+	.status {
+		display: flex;
+		align-items: stretch;
+		background: rgba(22, 22, 30, 0.85);
+		font-size: 0.85rem;
+		line-height: 1.8;
+		white-space: nowrap;
+	}
+
+	.session {
+		padding: 0 1ch;
+		background: var(--blue);
+		color: var(--bg-dark);
+		font-weight: 700;
+	}
+
+	.windows {
+		min-width: 0;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	ul {
+		display: flex;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.win {
+		display: block;
+		padding: 0 0.5ch 0 1ch;
+		color: var(--fg-dim);
+		white-space: pre;
+	}
+
+	.win:hover {
+		text-decoration: none;
+		background: var(--highlight);
+	}
+
+	.win:hover .label {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.index {
+		color: var(--comment);
+	}
+
+	.win.active {
+		background: var(--border);
+		color: var(--blue);
+		font-weight: 700;
+	}
+
+	.win.active .index {
+		color: var(--blue);
+	}
+
+	.win.active:hover .label {
+		text-decoration: none;
+	}
+
+	.right {
+		display: flex;
+		margin-left: auto;
+	}
+
+	.cwd {
+		padding: 0 1ch;
+		color: var(--comment);
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.host {
+		padding: 0 1ch;
+		background: var(--highlight);
+		color: var(--blue);
+	}
+
+	@media (max-width: 640px) {
+		.session,
+		.right {
+			display: none;
+		}
+
+		/* six windows don't fit on one line at phone width */
+		ul {
+			flex-wrap: wrap;
+		}
+	}
+</style>

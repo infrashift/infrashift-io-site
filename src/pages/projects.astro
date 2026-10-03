@@ -14,7 +14,7 @@ const projects = (await getCollection('projects')).sort(
 		{
 			projects.map(({ data }) => (
 				<li>
-					<span class="perm dim">drwxr-xr-x</span>
+					<span class="perm dim">drwx------</span>
 					<a class="name" href={data.url}>{data.name}/</a>
 					<span class="desc">{data.description}</span>
 				</li>

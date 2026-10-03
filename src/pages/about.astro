@@ -16,17 +16,22 @@ import Terminal from '../layouts/Terminal.astro';
 		<p>infrashift - trusted infrastructure, built in the open</p>
 
 		<h2>SYNOPSIS</h2>
-		<p><b>infrashift</b> [<i>--secure</i>] [<i>--reproducible</i>] [<i>--boring</i>]</p>
+		<p><b>infrashift</b> [<i>--signed</i>] [<i>--reproducible</i>] [<i>--tui</i>]</p>
 
 		<h2>DESCRIPTION</h2>
 		<p>
 			infrashift builds the unglamorous foundations that platform teams depend on: base images,
-			development environments, policy, and automation. We aim for software that is verifiable,
-			reproducible, and easy to operate.
+			development environments, policy, and automation.
 		</p>
 		<p>
-			Security and compliance are shifted left into the tools engineers already use, rather than
-			bolted on at the end.
+			Our focus is software supply chain security. Artifacts are signed, ship with SBOMs and
+			provenance, and build reproducibly, so you can verify exactly what you run and where it came
+			from. Security and compliance are shifted left into the tools engineers already use, rather
+			than bolted on at the end.
+		</p>
+		<p>
+			We choose fast, keyboard-driven TUIs over bloated, slow web UIs. Our tools live in the
+			terminal where engineers already work, which keeps context switching to a minimum.
 		</p>
 
 		<h2>SEE ALSO</h2>
@@ -60,6 +65,7 @@ import Terminal from '../layouts/Terminal.astro';
 	i {
 		font-style: normal;
 		color: var(--yellow);
+		white-space: nowrap;
 	}
 
 	@media (max-width: 640px) {

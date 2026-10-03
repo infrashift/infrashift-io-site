@@ -1,43 +1,36 @@
-# Astro Starter Kit: Minimal
+# infrashift.io
 
-```sh
-bun create astro@latest -- --template minimal
+Source for [infrashift.io](https://infrashift.io): a terminal-style static site
+built with [Astro](https://astro.build) and [bun](https://bun.sh), themed with
+Tokyo Night and laid out as a tmux session.
+
+## Usage
+
+All workflows go through the Makefile:
+
+```
+make help      # list targets
+make dev       # dev server at http://localhost:4321
+make check     # type-check pages and content
+make build     # static output in dist/
+make preview   # build, then serve dist/
+make ci        # frozen install + check + build (what CI runs)
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Layout
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+src/layouts/Terminal.astro     terminal window + tmux panes
+src/components/StatusBar.astro tmux status bar / navigation (keys 1-6)
+src/nav.ts                     window list
+src/content/projects/*.md      ~/projects entries
+src/content/news/*.md          news posts (git log style)
+src/pages/                     one file per page
+src/styles/global.css          Tokyo Night palette
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Deployment
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Pushes to `main` build with `make ci` and deploy to GitHub Pages via
+`.github/workflows/deploy.yml`. The custom domain `infrashift.io` is configured
+in the repository's Pages settings.

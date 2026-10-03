@@ -9,14 +9,15 @@ const Tag = href ? 'a' : 'span';
 
 <Tag class="prompt" href={href} aria-label="infrashift">
 	<span class="name">infrashift</span>
-	<span class="sym" aria-hidden="true">&gt;<span class="cursor">_</span></span>
+	<span class="sym" aria-hidden="true">&gt;</span>
+	<span class="cursor" aria-hidden="true">_</span>
 </Tag>
 
 <style>
 	.prompt {
 		display: inline-flex;
 		align-items: baseline;
-		gap: 0.6ch;
+		gap: 1ch;
 		font-weight: 700;
 		color: var(--fg);
 		text-decoration: none;
