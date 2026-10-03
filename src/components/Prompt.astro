@@ -1,0 +1,49 @@
+---
+interface Props {
+	href?: string;
+}
+
+const { href } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag class="prompt" href={href} aria-label="infrashift">
+	<span class="name">infrashift</span>
+	<span class="sym" aria-hidden="true">&gt;<span class="cursor">_</span></span>
+</Tag>
+
+<style>
+	.prompt {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.6ch;
+		font-weight: 700;
+		color: var(--fg);
+		text-decoration: none;
+	}
+
+	.prompt:hover .name {
+		color: var(--blue);
+	}
+
+	.sym {
+		color: var(--blue);
+	}
+
+	.cursor {
+		color: var(--fg);
+		animation: blink 1.1s steps(1) infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cursor {
+			animation: none;
+		}
+	}
+</style>

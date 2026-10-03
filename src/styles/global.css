@@ -1,0 +1,90 @@
+/* Tokyo Night (night variant) */
+:root {
+	--bg: #1a1b26;
+	--bg-dark: #16161e;
+	--bg-alpha: rgba(26, 27, 38, 0.72);
+	--highlight: #292e42;
+	--fg: #c0caf5;
+	--fg-dim: #a9b1d6;
+	--comment: #565f89;
+	--border: #3b4261;
+	--blue: #7aa2f7;
+	--cyan: #7dcfff;
+	--magenta: #bb9af7;
+	--green: #9ece6a;
+	--yellow: #e0af68;
+	--orange: #ff9e64;
+	--red: #f7768e;
+
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-family: var(--font-mono);
+	font-size: 15px;
+	line-height: 1.6;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	min-height: 100dvh;
+	color: var(--fg);
+	background-color: #0f0f17;
+	/* glow + faint grid, so the translucent window has something to show through */
+	background-image:
+		radial-gradient(ellipse 60% 50% at 15% 10%, rgba(122, 162, 247, 0.3), transparent 70%),
+		radial-gradient(ellipse 50% 45% at 90% 85%, rgba(187, 154, 247, 0.26), transparent 70%),
+		linear-gradient(rgba(122, 162, 247, 0.05) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(122, 162, 247, 0.05) 1px, transparent 1px);
+	background-size: auto, auto, 32px 32px, 32px 32px;
+	background-attachment: fixed;
+}
+
+a {
+	color: var(--cyan);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+a:focus-visible {
+	outline: 1px solid var(--blue);
+	outline-offset: 2px;
+}
+
+::selection {
+	background: var(--highlight);
+	color: var(--fg);
+}
+
+/* shared terminal idioms */
+.cmd {
+	margin: 0 0 0.5rem;
+	color: var(--fg);
+}
+
+.cmd::before {
+	content: '$ ';
+	color: var(--green);
+}
+
+.out {
+	margin: 0 0 1.75rem;
+	color: var(--fg-dim);
+}
+
+.dim {
+	color: var(--comment);
+}

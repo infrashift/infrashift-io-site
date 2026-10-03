@@ -1,0 +1,22 @@
+---
+import Terminal from '../layouts/Terminal.astro';
+---
+
+<Terminal title="not found" cwd="~/404">
+	<p class="cmd">cd <span class="missing-path">this-page</span></p>
+	<p class="out err">bash: cd: <span class="missing-path">this-page</span>: No such file or directory</p>
+	<p class="out">try <a href="/">cd ~</a></p>
+</Terminal>
+
+<script>
+	for (const el of document.querySelectorAll('.missing-path')) {
+		el.textContent = window.location.pathname;
+	}
+</script>
+
+<style>
+	.err {
+		margin-bottom: 0.5rem;
+		color: var(--red);
+	}
+</style>

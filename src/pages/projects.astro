@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Terminal from '../layouts/Terminal.astro';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
+);
+---
+
+<Terminal title="projects">
+	<p class="cmd">ls -l ~/projects</p>
+	<p class="total dim">total {projects.length}</p>
+	<ul class="ls">
+		{
+			projects.map(({ data }) => (
+				<li>
+					<span class="perm dim">drwxr-xr-x</span>
+					<a class="name" href={data.url}>{data.name}/</a>
+					<span class="desc">{data.description}</span>
+				</li>
+			))
+		}
+	</ul>
+</Terminal>
+
+<style>
+	.total {
+		margin: 0 0 0.25rem;
+	}
+
+	.ls {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		display: grid;
+		grid-template-columns: 11ch 1fr;
+		column-gap: 1ch;
+		padding: 0.5rem 0;
+		border-bottom: 1px dashed rgba(59, 66, 97, 0.6);
+	}
+
+	li:last-child {
+		border-bottom: none;
+	}
+
+	.name {
+		font-weight: 700;
+		overflow-wrap: anywhere;
+	}
+
+	.desc {
+		grid-column: 2;
+		color: var(--fg-dim);
+	}
+
+	@media (max-width: 640px) {
+		li {
+			grid-template-columns: 1fr;
+		}
+
+		.perm {
+			display: none;
+		}
+
+		.desc {
+			grid-column: 1;
+		}
+	}
+</style>

@@ -1,0 +1,42 @@
+---
+import Terminal from '../layouts/Terminal.astro';
+---
+
+<Terminal>
+	<p class="tagline">infrastructure, shifted left.</p>
+
+	<p class="cmd">cat /etc/motd</p>
+	<div class="out motd">
+		<p>We build trusted, reproducible foundations for platform teams:</p>
+		<p><span class="bullet">›</span> hardened containers and dev environments</p>
+		<p><span class="bullet">›</span> policy and supply-chain security as code</p>
+		<p><span class="bullet">›</span> automation for the HashiCorp stack</p>
+	</div>
+
+	<p class="cmd">ls ~</p>
+	<p class="out">
+		<a href="/projects/">projects/</a>&nbsp;&nbsp;
+		<a href="/about/">about/</a>&nbsp;&nbsp;
+		<a href="/contact/">contact/</a>
+	</p>
+</Terminal>
+
+<style>
+	.tagline {
+		margin: 0 0 2rem;
+		font-size: 1.1rem;
+		color: var(--magenta);
+	}
+
+	.motd p {
+		margin: 0;
+	}
+
+	.motd p:first-child {
+		margin-bottom: 0.5rem;
+	}
+
+	.bullet {
+		color: var(--blue);
+	}
+</style>

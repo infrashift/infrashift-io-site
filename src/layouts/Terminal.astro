@@ -1,0 +1,153 @@
+---
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '../styles/global.css';
+import Prompt from '../components/Prompt.astro';
+import TabBar from '../components/TabBar.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	cwd?: string;
+}
+
+const {
+	title,
+	description = 'infrashift: infrastructure, shifted left.',
+	cwd = '~' + Astro.url.pathname.replace(/\/+$/, ''),
+} = Astro.props;
+
+const pageTitle = title ? `${title} · infrashift` : 'infrashift';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#1a1b26" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{pageTitle}</title>
+	</head>
+	<body>
+		<div class="window">
+			<header class="titlebar">
+				<Prompt href="/" />
+				<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+			</header>
+			<TabBar />
+			<main class="content">
+				<slot />
+			</main>
+			<footer class="status">
+				<span class="mode">NORMAL</span>
+				<span class="cwd">{cwd}</span>
+				<span class="hints"><span class="dim">1-4</span> switch tab</span>
+			</footer>
+		</div>
+	</body>
+</html>
+
+<style>
+	body {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem 1rem;
+	}
+
+	.window {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-width: 960px;
+		min-height: min(640px, calc(100dvh - 4rem));
+		background: var(--bg-alpha);
+		-webkit-backdrop-filter: blur(14px) saturate(140%);
+		backdrop-filter: blur(14px) saturate(140%);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		box-shadow:
+			0 24px 60px rgba(0, 0, 0, 0.55),
+			inset 0 1px 0 rgba(192, 202, 245, 0.06);
+		overflow: hidden;
+	}
+
+	.titlebar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.75rem 1.25rem;
+		font-size: 1.25rem;
+	}
+
+	.dots {
+		display: flex;
+		gap: 6px;
+	}
+
+	.dots i {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: var(--highlight);
+		border: 1px solid var(--border);
+	}
+
+	.content {
+		flex: 1;
+		width: 100%;
+		max-width: 82ch;
+		padding: 1.75rem 1.5rem 2rem;
+	}
+
+	.status {
+		display: flex;
+		align-items: center;
+		gap: 1ch;
+		border-top: 1px solid var(--border);
+		background: rgba(22, 22, 30, 0.7);
+		font-size: 0.85rem;
+		white-space: nowrap;
+	}
+
+	.mode {
+		padding: 0.2rem 1ch;
+		background: var(--blue);
+		color: var(--bg-dark);
+		font-weight: 700;
+	}
+
+	.cwd {
+		color: var(--fg-dim);
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.hints {
+		margin-left: auto;
+		padding-right: 1ch;
+		color: var(--fg-dim);
+	}
+
+	@media (max-width: 640px) {
+		body {
+			padding: 16px;
+			align-items: stretch;
+		}
+
+		.window {
+			min-height: calc(100dvh - 32px);
+		}
+
+		.content {
+			padding: 1.25rem 1rem 1.5rem;
+		}
+
+		.hints {
+			display: none;
+		}
+	}
+</style>

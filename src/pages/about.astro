@@ -1,0 +1,74 @@
+---
+import Terminal from '../layouts/Terminal.astro';
+---
+
+<Terminal title="about">
+	<p class="cmd">man infrashift</p>
+
+	<article class="man">
+		<header class="man-head dim">
+			<span>INFRASHIFT(7)</span>
+			<span>Organization Manual</span>
+			<span>INFRASHIFT(7)</span>
+		</header>
+
+		<h2>NAME</h2>
+		<p>infrashift - trusted infrastructure, built in the open</p>
+
+		<h2>SYNOPSIS</h2>
+		<p><b>infrashift</b> [<i>--secure</i>] [<i>--reproducible</i>] [<i>--boring</i>]</p>
+
+		<h2>DESCRIPTION</h2>
+		<p>
+			infrashift builds the unglamorous foundations that platform teams depend on: base images,
+			development environments, policy, and automation. We aim for software that is verifiable,
+			reproducible, and easy to operate.
+		</p>
+		<p>
+			Security and compliance are shifted left into the tools engineers already use, rather than
+			bolted on at the end.
+		</p>
+
+		<h2>SEE ALSO</h2>
+		<p><a href="/projects/">projects</a>(1), <a href="/contact/">contact</a>(1)</p>
+	</article>
+</Terminal>
+
+<style>
+	.man-head {
+		display: flex;
+		justify-content: space-between;
+		gap: 1ch;
+		margin-bottom: 1.25rem;
+	}
+
+	h2 {
+		margin: 1.25rem 0 0.25rem;
+		font-size: 1rem;
+		color: var(--magenta);
+	}
+
+	.man p {
+		margin: 0 0 0.75rem 4ch;
+		color: var(--fg-dim);
+	}
+
+	b {
+		color: var(--fg);
+	}
+
+	i {
+		font-style: normal;
+		color: var(--yellow);
+	}
+
+	@media (max-width: 640px) {
+		.man-head span:nth-child(2) {
+			display: none;
+		}
+
+		.man p {
+			margin-left: 2ch;
+		}
+	}
+</style>

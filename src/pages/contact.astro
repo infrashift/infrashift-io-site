@@ -1,0 +1,51 @@
+---
+import Terminal from '../layouts/Terminal.astro';
+
+const entries = [
+	{ key: 'github', label: 'github.com/infrashift', href: 'https://github.com/infrashift' },
+	{ key: 'email', label: 'hello@infrashift.io', href: 'mailto:hello@infrashift.io' },
+];
+---
+
+<Terminal title="contact">
+	<p class="cmd">infrashift --contact</p>
+	<dl class="entries">
+		{
+			entries.map((entry) => (
+				<div class="entry">
+					<dt>{entry.key}</dt>
+					<dd>
+						<span class="arrow" aria-hidden="true">→</span>
+						<a href={entry.href}>{entry.label}</a>
+					</dd>
+				</div>
+			))
+		}
+	</dl>
+</Terminal>
+
+<style>
+	.entries {
+		margin: 0;
+	}
+
+	.entry {
+		display: flex;
+		gap: 1ch;
+		padding: 0.35rem 0;
+	}
+
+	dt {
+		min-width: 8ch;
+		color: var(--yellow);
+	}
+
+	dd {
+		margin: 0;
+	}
+
+	.arrow {
+		margin-right: 1ch;
+		color: var(--comment);
+	}
+</style>
