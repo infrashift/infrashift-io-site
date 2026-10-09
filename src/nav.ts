@@ -7,10 +7,11 @@ export interface Tab {
 export const tabs: Tab[] = [
 	{ key: '1', label: 'home', href: '/' },
 	{ key: '2', label: 'projects', href: '/projects/' },
-	{ key: '3', label: 'news', href: '/news/' },
-	{ key: '4', label: 'about', href: '/about/' },
-	{ key: '5', label: 'thanks', href: '/thanks/' },
-	{ key: '6', label: 'contact', href: '/contact/' },
+	{ key: '3', label: 'tech-radar', href: '/tech-radar/' },
+	{ key: '4', label: 'news', href: '/news/' },
+	{ key: '5', label: 'about', href: '/about/' },
+	{ key: '6', label: 'thanks', href: '/thanks/' },
+	{ key: '7', label: 'contact', href: '/contact/' },
 ];
 
 const trim = (path: string) => path.replace(/\/+$/, '') || '/';

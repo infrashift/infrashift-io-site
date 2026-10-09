@@ -42,7 +42,7 @@ const { pathname } = Astro.url;
 </footer>
 
 <script>
-	// number keys select a tmux window, like prefix + 1..4
+	// number keys select a tmux window, like prefix + 1..7
 	document.addEventListener('keydown', (event) => {
 		if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
 		const target = event.target as HTMLElement | null;
@@ -145,7 +145,7 @@ const { pathname } = Astro.url;
 			display: none;
 		}
 
-		/* six windows don't fit on one line at phone width */
+		/* seven windows don't fit on one line at phone width */
 		ul {
 			flex-wrap: wrap;
 		}

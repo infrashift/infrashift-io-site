@@ -1,0 +1,232 @@
+---
+import Terminal from '../layouts/Terminal.astro';
+
+interface Entry {
+	name: string;
+	desc: string;
+}
+
+interface Volume {
+	name: string;
+	url: string;
+	note: string;
+}
+
+const quadrants: Entry[] = [
+	{ name: 'Techniques', desc: 'practices and processes, from how we write code to how we ship it' },
+	{ name: 'Platforms', desc: 'the infrastructure we build on: clouds, runtimes, and hosted services' },
+	{ name: 'Tools', desc: 'the software we use to build, test, secure, and operate systems' },
+	{
+		name: 'Languages & Frameworks',
+		desc: 'the languages and libraries we write our solutions in',
+	},
+];
+
+const rings: Entry[] = [
+	{ name: 'Adopt', desc: 'proven in production; our default choice' },
+	{ name: 'Trial', desc: 'worth pursuing on projects that can absorb the risk' },
+	{ name: 'Assess', desc: 'worth exploring to understand how it could affect us' },
+	{ name: 'Hold', desc: 'proceed with caution, or move away from it' },
+];
+
+// newest first; add a volume at the end of each calendar quarter
+const volumes: Volume[] = [
+	{
+		name: '2026.09',
+		url: 'https://infrashift.github.io/technology-radar/radar/',
+		note: 'our first radar',
+	},
+];
+---
+
+<Terminal
+	title="tech radar"
+	description="The infrashift technology radar: the techniques, platforms, tools, and frameworks we adopt, trial, assess, and hold. Published quarterly."
+>
+	<p class="cmd">cat ~/tech-radar/README</p>
+	<div class="out readme">
+		<p>
+			A technology radar is a snapshot of the techniques, platforms, tools, languages, and frameworks
+			that shape how we build. Each item on it is a <b>blip</b>, placed in a <b>quadrant</b> by what
+			kind of thing it is and in a <b>ring</b> by how strongly we recommend it.
+		</p>
+		<p>
+			The radar records our opinions in the open: what we use, what we are trying, what we are
+			watching, and what we have stepped back from. It is how we explain our choices, and a
+			starting point for teams making the same decisions.
+		</p>
+	</div>
+
+	<p class="cmd">ls ~/tech-radar/quadrants</p>
+	<dl class="out defs">
+		{
+			quadrants.map((q) => (
+				<div>
+					<dt class="quadrant">{q.name}</dt>
+					<dd>{q.desc}</dd>
+				</div>
+			))
+		}
+	</dl>
+
+	<p class="cmd">ls ~/tech-radar/rings</p>
+	<dl class="out defs">
+		{
+			rings.map((r) => (
+				<div>
+					<dt class={`ring ring-${r.name.toLowerCase()}`}>{r.name}</dt>
+					<dd>{r.desc}</dd>
+				</div>
+			))
+		}
+	</dl>
+
+	<p class="cmd">ls -l ~/tech-radar/volumes</p>
+	<p class="total dim">total {volumes.length}</p>
+	<ul class="ls">
+		{
+			volumes.map((v, i) => (
+				<li>
+					<span class="perm dim">drwxr-xr-x</span>
+					<a class="name" href={v.url} target="_blank" rel="noopener noreferrer">
+						{v.name}/
+					</a>
+					<span class="note">
+						{i === 0 && <span class="latest">latest</span>}
+						{v.note}
+					</span>
+				</li>
+			))
+		}
+	</ul>
+
+	<p class="cmd">cat ~/tech-radar/SCHEDULE</p>
+	<div class="out">
+		<p>
+			Volume {volumes[volumes.length - 1].name} is our first technology radar publication. We will
+			publish a new volume at the end of each calendar quarter, so you can follow how our thinking
+			changes over time.
+		</p>
+		<p>
+			<a href={volumes[0].url} target="_blank" rel="noopener noreferrer">
+				View the latest radar &nearr;<span class="sr-only"> (opens in a new tab)</span>
+			</a>
+		</p>
+	</div>
+</Terminal>
+
+<style>
+	.readme p,
+	.out p {
+		margin: 0 0 0.75rem;
+	}
+
+	b {
+		color: var(--magenta);
+	}
+
+	.defs {
+		margin-top: 0;
+	}
+
+	.defs div {
+		display: grid;
+		grid-template-columns: 24ch 1fr;
+		column-gap: 1ch;
+	}
+
+	.defs dd {
+		margin: 0;
+	}
+
+	.quadrant {
+		color: var(--blue);
+		font-weight: 700;
+	}
+
+	.ring {
+		font-weight: 700;
+	}
+
+	.ring-adopt {
+		color: var(--green);
+	}
+
+	.ring-trial {
+		color: var(--cyan);
+	}
+
+	.ring-assess {
+		color: var(--yellow);
+	}
+
+	.ring-hold {
+		color: var(--red);
+	}
+
+	.total {
+		margin: 0 0 0.25rem;
+	}
+
+	.ls {
+		margin: 0 0 1.75rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.ls li {
+		display: grid;
+		grid-template-columns: 11ch 9ch 1fr;
+		column-gap: 1ch;
+		padding: 0.25rem 0;
+	}
+
+	.name {
+		font-weight: 700;
+	}
+
+	.note {
+		color: var(--fg-dim);
+	}
+
+	.latest {
+		margin-right: 1ch;
+		color: var(--green);
+	}
+
+	.latest::before {
+		content: '(';
+	}
+
+	.latest::after {
+		content: ')';
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	@media (max-width: 640px) {
+		.defs div {
+			grid-template-columns: 1fr;
+			margin-bottom: 0.5rem;
+		}
+
+		.defs dd {
+			padding-left: 2ch;
+		}
+
+		.ls li {
+			grid-template-columns: 9ch 1fr;
+		}
+
+		.perm {
+			display: none;
+		}
+	}
+</style>
